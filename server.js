@@ -25,9 +25,27 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+//create middleware
+app.get('/api/whoami',(req, res) => {
+	//tes dulu apakah ada key ipaddress, software, language
+	console.log(req.headers)
+	let ipaddress = req.headers['x-forwarded-for'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
+  let language = req.headers['accept-language']; //ambil bahasanya
+	let software = req.headers["user-agent"]; // ambil softwarenya
+//return ke dalam json
+	res.json({
+		ipaddress: ipaddress,
+		language: language,
+		software: software
+	})
+})
 
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+const PORT = 3000;
+var listener = app.listen(PORT, function () {
+  console.log('Your app is listening on port ' + PORT);
 });
